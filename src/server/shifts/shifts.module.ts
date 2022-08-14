@@ -8,6 +8,7 @@ import { ShiftsController } from './shifts.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Shift]), UsersModule],
+  exports: [ShiftsService],
   controllers: [ShiftsController],
   providers: [ShiftsService],
 })

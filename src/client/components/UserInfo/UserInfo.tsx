@@ -14,7 +14,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
   const router = useRouter();
 
   const handleLogout = async () => {
-    await fetch('/auth/logout', {
+    await fetch('/api/auth/logout', {
       method: 'POST',
     });
     router.push('/login');

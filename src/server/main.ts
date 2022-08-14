@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser(process.env.COOKIE_SECRET));
+  app.setGlobalPrefix('api', { exclude: ['login', 'dashboard'] });
   await app.listen(PORT);
 }
 bootstrap();

@@ -26,7 +26,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ headerText }) => {
     console.log(
       `Submitting login form with email: ${email} and password: ${password}`,
     );
-    const response = await fetch(`/auth/login`, {
+    const response = await fetch(`/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -16,31 +16,31 @@ import { RequireRole } from '../rbac/role.decorator';
 import { User } from './entities/user.entity';
 import { CurrentUser } from '../auth/currentuser.decorator';
 
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get('users/me')
+  @Get('me')
   @UseGuards(JwtAuthGuard)
   getCurrentUser(@CurrentUser() user: User) {
     return user;
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('users')
+  @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('users/:id')
+  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findById(+id);
   }
 
   @RequireRole(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('users/:id')
+  @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() updateUserDto: Partial<UpdateUserDto>,
@@ -50,7 +50,7 @@ export class UsersController {
 
   @RequireRole(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Delete('users/:id')
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }

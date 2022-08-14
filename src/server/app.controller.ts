@@ -1,3 +1,4 @@
+import { ShiftsService } from './shifts/shifts.service';
 import { RedirectInterceptor } from './auth/interceptors/redirect.interceptor';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import {
@@ -13,6 +14,8 @@ import { UnauthorizedExceptionFilter } from './auth/unauthorized.filter';
 
 @Controller()
 export class AppController {
+  constructor(private shiftsService: ShiftsService) {}
+
   @Get()
   @UseInterceptors(new RedirectInterceptor('/dashboard'))
   home() {
@@ -29,9 +32,21 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @UseFilters(UnauthorizedExceptionFilter)
   @Render('dashboard')
-  dashboard(@CurrentUser() currentUser) {
-    console.log('Controller:', currentUser);
+  async dashboard(@CurrentUser() currentUser) {
+    const shifts = await this.shiftsService.findAssigned(currentUser.id);
 
-    return currentUser;
+    const query = {
+      user: {
+        ...currentUser,
+      },
+      shifts: shifts.map((shift) => ({
+        name: shift.name,
+        start: shift.start.toISOString(),
+        end: shift.end.toISOString(),
+      })),
+    };
+
+    console.log('Controller:', query);
+    return query;
   }
 }
